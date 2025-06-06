@@ -8,6 +8,7 @@ exports.getDashboardData = async (req, res) => {
         const userId = req.user._id;
         const userObjectId =  new Types.ObjectId(String(userId));
 
+
         // Fetch total income and expense
         const totalIncome = await Income.aggregate([
             { $match: { userId: userObjectId } },
@@ -55,7 +56,7 @@ exports.getDashboardData = async (req, res) => {
 
         //Final Response
         res.json({
-            totalbalance:
+            totalBalance:
             (totalIncome[0]?.total || 0) - (totalExpense[0]?.total || 0),
             totalIncome: totalIncome[0]?.total || 0,
             totalExpense: totalExpense[0]?.total || 0,
@@ -67,11 +68,12 @@ exports.getDashboardData = async (req, res) => {
                 transactions: last60DaysIncomeTransactions,
                 total: incomeLast60Days
             },
-            recenttransactions: lastTransactions,
+            recentTransactions: lastTransactions,
         });
     }
     catch (error) {
         console.error('Error fetching dashboard data:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: 'Internal server error', error: error.message });
+
     }
 };

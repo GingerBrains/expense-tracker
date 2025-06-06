@@ -8,7 +8,7 @@ exports.addExpense = async (req, res) => {
         const { icon, category, amount } = req.body;
 
         // Validate input
-        if (!category || !amount || !date) {
+        if (!category || !amount ) {
             return res.status(400).json({ message: 'Please provide all required fields.' });
         }
 

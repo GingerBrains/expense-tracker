@@ -7,8 +7,13 @@ exports.addIncome = async (req, res) => {
     try{
         const { icon, source, amount } = req.body;
 
+        // Check amount is a number
+        if (isNaN(amount)) {
+            return res.status(400).json({ message: 'Amount must be a number.' });
+        }
+
         // Validate input
-        if (!source || !amount || !date) {
+        if (!source || !amount ) {
             return res.status(400).json({ message: 'Please provide all required fields.' });
         }
 
@@ -22,10 +27,13 @@ exports.addIncome = async (req, res) => {
         });
 
         await newIncome.save();
-        res.status(500).json(newIncome);
+        res.status(200).json(newIncome);
     } catch (error) {
+        // Log the entire error object
         console.error('Error adding income source:', error);
-        res.status(500).json({ message: 'Server error. Please try again later.' });
+        
+        // Return a detailed error message (optional)
+        res.status(500).json({ message: 'Server error. Please try again later.', error: error.message });
     }
 }
 
