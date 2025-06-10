@@ -11,7 +11,9 @@ import {
 } from "recharts";
 
 const CustomPieChart = ({ data, label, totalAmount,colors, showTextAnchor }) => {
-  return <ResponsiveContainer width='100%' height={380}>
+    //console.log("📊 Chart Data", data);
+    console.log("Total amount prop:", totalAmount);
+  return ( <ResponsiveContainer width='100%' height={380}>
     <PieChart>
         <Pie
         data={data}
@@ -31,33 +33,33 @@ const CustomPieChart = ({ data, label, totalAmount,colors, showTextAnchor }) => 
         <Legend content={CustomLegend}/>
 
         {showTextAnchor && (
-            <>
-            <text
-            x="50%"
-            y="50%"
-            dy={-25}
-            textAnchor="middle"
-            fill="#666"
-            fontSize="14px"
-            >
-                {label}
-            </text>
-
-            <text
-                x="50%"
-                y="50%"
-                dy={8}
-                textAnchor="middle"
-                fill="#333"
-                fontSize="24px"
-                fontWeight="semi-bold"
-            >
-                {totalAmount}
-            </text>
-            </>
-        )}
+  <g>
+    <text
+      x="50%"
+      y="50%"
+      dy={-30}
+      textAnchor="middle"
+      fill="#666"
+      fontSize="14px"
+    >
+      {label}
+    </text>
+    <text
+      x="50%"
+      y="45%"
+      dy={15}
+      textAnchor="middle"
+      fill="#333"
+      fontSize="24px"
+      fontWeight="600"
+    >
+      {totalAmount}
+    </text>
+  </g>
+)}
     </PieChart>
   </ResponsiveContainer>
+  );
 }
 
 export default CustomPieChart
