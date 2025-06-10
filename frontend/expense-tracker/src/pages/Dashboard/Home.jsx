@@ -9,7 +9,7 @@ import { IoMdCard } from 'react-icons/io';
 import { addThousandsSeparator } from '../../utils/helper';
 import { LuHandCoins, LuWalletMinimal } from 'react-icons/lu';
 import RecentTransactions from '../../components/Dashboard/RecentTransactions';
-import FincanceOverview from '../../components/Dashboard/FincanceOverview';
+import FinanceOverview from '../../components/Dashboard/FinanceOverview';
 import ExpenseTransactions from '../../components/Dashboard/ExpenseTransactions';
 import Last30DaysExpenses from '../../components/Dashboard/Last30DaysExpenses';
 import RecentIncomeWithChart from '../../components/Dashboard/RecentIncomeWithChart';
@@ -80,7 +80,7 @@ const Home = () => {
             onSeeMore={() => navigate('/expense')}
           />
 
-          <FincanceOverview
+          <FinanceOverview
             totalBalance={dashboardData?.totalBalance || 0}
             totalIncome={dashboardData?.totalIncome || 0}
             totalExpense={dashboardData?.totalExpense || 0}
