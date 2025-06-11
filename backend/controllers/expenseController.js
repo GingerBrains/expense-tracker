@@ -22,7 +22,7 @@ exports.addExpense = async (req, res) => {
         });
 
         await newExpense.save();
-        res.status(500).json(newExpense);
+        res.status(201).json(newExpense);
     } catch (error) {
         console.error('Error adding expense category:', error);
         res.status(500).json({ message: 'Server error. Please try again later.' });
