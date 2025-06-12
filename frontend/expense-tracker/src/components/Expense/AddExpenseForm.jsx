@@ -17,6 +17,7 @@ const AddExpenseForm = ({ onAddExpense }) => {
         <EmojiPickerPopup
         icon={income.icon}
         onSelect={(selectedicon) => handleChange("icon", selectedicon)}
+        onIconError={() => toast.error("Please select an icon!")}
         />
 
       <Input 

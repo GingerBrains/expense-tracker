@@ -65,6 +65,11 @@ const Expense = () => {
         return;
       }
 
+      if (!icon) {
+        toast.error("Icon is required");
+        return;
+      }
+
       try {
         await axiosInstance.post(API_PATHS.EXPENSE.ADD_EXPENSE, {
           category,

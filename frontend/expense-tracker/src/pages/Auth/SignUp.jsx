@@ -3,14 +3,14 @@ import AuthLayout from '../../components/layouts/AuthLayout';
 import Input from '../../components/Inputs/Input';
 import { Link, useNavigate } from 'react-router-dom';
 import { validateEmail } from '../../utils/helper';
-import ProfilePhotoSelector from '../../components/Inputs/ProfilePhotoSelector';
+// import ProfilePhotoSelector from '../../components/Inputs/ProfilePhotoSelector'; // Commented out this import
 import axiosInstance  from '../../utils/axiosInstance';
 import { API_PATHS } from '../../utils/apiPaths';
 import { UserContext } from '../../context/userContext';
-import uploadImage from '../../utils/uploadImage';
+// import uploadImage from '../../utils/uploadImage'; // Commented out this import
 
 const SignUp = () => {
-  const [profilePic, setProfilePic] = useState(null);
+  const [profilePic, setProfilePic] = useState(null); // Profile picture state
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -24,7 +24,7 @@ const SignUp = () => {
   const handleSignUp = async (e) => {
     e.preventDefault();
 
-    let profileImageUrl = '';
+    let profileImageUrl = ''; // Removed the use of profilePic for now
 
     if (!validateEmail(email)) {
       setError('Please enter a valid email address');
@@ -39,21 +39,21 @@ const SignUp = () => {
       return;
     }
 
-
     setError("");
 
     // SignUp API call 
     try{
-      // If a profile picture is selected, upload it and get the URL
-      if (profilePic) {
-        const imgUploadRes = await uploadImage(profilePic);
-        profileImageUrl = imgUploadRes.imageUrl || '';
-      }
+      // Commented out the image upload logic
+      // if (profilePic) {
+      //   const imgUploadRes = await uploadImage(profilePic);
+      //   profileImageUrl = imgUploadRes.imageUrl || '';
+      // }
+
       const response = await axiosInstance.post(API_PATHS.AUTH.REGISTER, {
         fullName,
         email,
         password,
-        profileImageUrl,
+        profileImageUrl, // This will now be an empty string
       });
       const { token, user } = response.data;
       if (token) {
@@ -64,7 +64,7 @@ const SignUp = () => {
     } catch (error){
       if (error.response && error.response.data) {
         setError(error.response.data.message);
-    } else {
+      } else {
         setError('An unexpected error occurred. Please try again later.');
       }
     }
@@ -76,11 +76,12 @@ const SignUp = () => {
         <h3 className='text-xl font-semibold text-black'>Create an Account</h3>
         <p className='text-xs text-slate-700 mt-[5px] mb-6'>Enter your details below!</p>
 
-        <form onSubmit={handleSignUp}>
+        <form onSubmit={handleSignUp} className="w-full">
 
-          <ProfilePhotoSelector image={profilePic} setImage={setProfilePic} />
+          {/* Commented out the ProfilePhotoSelector component */}
+          {/* <ProfilePhotoSelector image={profilePic} setImage={setProfilePic} /> */}
 
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+          <div className='grid grid-cols-1 gap-4 w-full'>
             <Input
               value={fullName}
               onChange={({target}) => setFullName(target.value)}
@@ -95,7 +96,7 @@ const SignUp = () => {
               placeholder="morgan@example.com"
               type="email"
             />
-            <div className='col-span-2'>
+            <div className='col-span-1'>
               <Input
               value={password}
               onChange={({target}) => setPassword(target.value)}
@@ -108,16 +109,17 @@ const SignUp = () => {
 
             {error && <p className='text-red-500 text-xs pb-2.5'>{error}</p>}
             
-                        <button type='submit' className='btn-primary'>
-                          Sign Up
-                        </button>
+            <button type='submit' className='btn-primary'>
+              Sign Up
+            </button>
             
-                        <p className='text-[13px] text-slate-600 mt-3'>
-                          Already have an account?{" "}
-                          <Link className='font-medium text-primary underline' to="/login">
-                            Login
-                          </Link>
-                        </p>
+            <p className='text-[13px] text-slate-600 mt-3 mb-4'>
+  Already have an account?{" "}
+  <Link className='font-medium text-primary underline' to="/login">
+    Login
+  </Link>
+</p>
+
           </form>
       </div>
     </AuthLayout>
