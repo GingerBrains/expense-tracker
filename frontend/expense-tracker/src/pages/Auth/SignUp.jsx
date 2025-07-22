@@ -3,11 +3,11 @@ import AuthLayout from '../../components/layouts/AuthLayout';
 import Input from '../../components/Inputs/Input';
 import { Link, useNavigate } from 'react-router-dom';
 import { validateEmail } from '../../utils/helper';
-// import ProfilePhotoSelector from '../../components/Inputs/ProfilePhotoSelector'; // Commented out this import
+import ProfilePhotoSelector from '../../components/Inputs/ProfilePhotoSelector'; // Uncommented
 import axiosInstance  from '../../utils/axiosInstance';
 import { API_PATHS } from '../../utils/apiPaths';
 import { UserContext } from '../../context/userContext';
-// import uploadImage from '../../utils/uploadImage'; // Commented out this import
+import uploadImage from '../../utils/uploadImage'; // Uncommented
 
 const SignUp = () => {
   const [profilePic, setProfilePic] = useState(null); // Profile picture state
@@ -16,6 +16,7 @@ const SignUp = () => {
   const [password, setPassword] = useState('');
 
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
 
   const { updateUser } = useContext(UserContext)
   const navigate = useNavigate();
@@ -43,24 +44,20 @@ const SignUp = () => {
 
     // SignUp API call 
     try{
-      // Commented out the image upload logic
-      // if (profilePic) {
-      //   const imgUploadRes = await uploadImage(profilePic);
-      //   profileImageUrl = imgUploadRes.imageUrl || '';
-      // }
+      // Upload image if selected
+      if (profilePic) {
+        const imgUploadRes = await uploadImage(profilePic);
+        profileImageUrl = imgUploadRes.imageUrl || '';
+      }
 
       const response = await axiosInstance.post(API_PATHS.AUTH.REGISTER, {
         fullName,
         email,
         password,
-        profileImageUrl, // This will now be an empty string
+        profileImageUrl, // Now contains the uploaded image URL if available
       });
-      const { token, user } = response.data;
-      if (token) {
-        localStorage.setItem('token', token);
-        updateUser(user);
-        navigate('/dashboard');
-      }
+      // Show success message and hide form
+      setSuccess(true);
     } catch (error){
       if (error.response && error.response.data) {
         setError(error.response.data.message);
@@ -76,10 +73,22 @@ const SignUp = () => {
         <h3 className='text-xl font-semibold text-black'>Create an Account</h3>
         <p className='text-xs text-slate-700 mt-[5px] mb-6'>Enter your details below!</p>
 
+        {success ? (
+          <div className="bg-green-100 border border-green-300 text-green-800 rounded p-4 text-center">
+            Registration successful!<br />
+            Please check your email to verify your account before logging in.
+            <button
+              className="btn-primary mt-4"
+              onClick={() => navigate('/login')}
+            >
+              Go to Login
+            </button>
+          </div>
+        ) : (
         <form onSubmit={handleSignUp} className="w-full">
 
-          {/* Commented out the ProfilePhotoSelector component */}
-          {/* <ProfilePhotoSelector image={profilePic} setImage={setProfilePic} /> */}
+          {/* Profile Photo Selector */}
+          <ProfilePhotoSelector image={profilePic} setImage={setProfilePic} />
 
           <div className='grid grid-cols-1 gap-4 w-full'>
             <Input
@@ -121,6 +130,7 @@ const SignUp = () => {
 </p>
 
           </form>
+        )}
       </div>
     </AuthLayout>
   )

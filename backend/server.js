@@ -11,7 +11,6 @@ const dashboardRoutes = require("./routes/dashboardRoutes");
 
 app.use(cors());  // Allows all origins
 
-
 // app.use(
 //     cors({
 //         origin: process.env.CLIENT_URL || "*",
