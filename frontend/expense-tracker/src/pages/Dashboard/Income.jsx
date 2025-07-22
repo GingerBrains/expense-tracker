@@ -64,7 +64,7 @@ const Income = () => {
       }
 
       try {
-        await axiosInstance.post(API_PATHS.INCOME.ADD, {
+        await axiosInstance.post(API_PATHS.INCOME.ADD_INCOME, {
           source,
           amount,
           date,
