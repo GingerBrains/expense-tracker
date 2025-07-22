@@ -16,6 +16,7 @@ const SignUp = () => {
   const [password, setPassword] = useState('');
 
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
 
   const { updateUser } = useContext(UserContext)
   const navigate = useNavigate();
@@ -55,12 +56,8 @@ const SignUp = () => {
         password,
         profileImageUrl, // Now contains the uploaded image URL if available
       });
-      const { token, user } = response.data;
-      if (token) {
-        localStorage.setItem('token', token);
-        updateUser(user);
-        navigate('/dashboard');
-      }
+      // Show success message and hide form
+      setSuccess(true);
     } catch (error){
       if (error.response && error.response.data) {
         setError(error.response.data.message);
@@ -76,6 +73,18 @@ const SignUp = () => {
         <h3 className='text-xl font-semibold text-black'>Create an Account</h3>
         <p className='text-xs text-slate-700 mt-[5px] mb-6'>Enter your details below!</p>
 
+        {success ? (
+          <div className="bg-green-100 border border-green-300 text-green-800 rounded p-4 text-center">
+            Registration successful!<br />
+            Please check your email to verify your account before logging in.
+            <button
+              className="btn-primary mt-4"
+              onClick={() => navigate('/login')}
+            >
+              Go to Login
+            </button>
+          </div>
+        ) : (
         <form onSubmit={handleSignUp} className="w-full">
 
           {/* Profile Photo Selector */}
@@ -121,6 +130,7 @@ const SignUp = () => {
 </p>
 
           </form>
+        )}
       </div>
     </AuthLayout>
   )

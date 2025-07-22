@@ -83,6 +83,12 @@ const Login = () => {
               LOGIN
             </button>
 
+            <div className='flex justify-start mt-2'>
+              <Link to="/forgot-password" className="text-primary text-sm underline hover:opacity-80">
+                Forgot Password?
+              </Link>
+            </div>
+
             <p className='text-[13px] text-slate-600 mt-3'>
               Dont have an account?{" "}
               <Link className='font-medium text-primary underline' to="/signUp">
