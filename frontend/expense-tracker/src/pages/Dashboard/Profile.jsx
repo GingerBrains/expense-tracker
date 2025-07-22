@@ -26,9 +26,14 @@ const Profile = () => {
       return;
     }
     setLoading(true);
+
+    // Determine what to send for profileImageUrl
     let profileImageUrl = user?.profileImageUrl;
     try {
-      if (profilePic && profilePic instanceof File) {
+      if (profilePic === null) {
+        // User removed the image
+        profileImageUrl = "";
+      } else if (profilePic && profilePic instanceof File) {
         // Upload new image
         const formData = new FormData();
         formData.append('image', profilePic);
@@ -48,6 +53,7 @@ const Profile = () => {
       setSuccess('Profile updated successfully!');
       setPassword('');
       setConfirmPassword('');
+      setProfilePic(null); // Reset local state
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to update profile');
     } finally {
@@ -60,7 +66,7 @@ const Profile = () => {
       <div className="max-w-lg mx-auto p-6 bg-white rounded-xl shadow-md mt-8">
         <h2 className="text-2xl font-semibold mb-4">My Profile</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <ProfilePhotoSelector image={profilePic || user?.profileImageUrl} setImage={setProfilePic} />
+          <ProfilePhotoSelector image={profilePic === null ? null : (profilePic || user?.profileImageUrl)} setImage={setProfilePic} />
           <Input
             label="Full Name"
             value={fullName}
@@ -102,4 +108,4 @@ const Profile = () => {
   );
 };
 
-export default Profile; 
+export default Profile;
