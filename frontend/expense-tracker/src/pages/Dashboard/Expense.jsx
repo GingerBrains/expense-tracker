@@ -71,7 +71,7 @@ const Expense = () => {
       }
 
       try {
-        await axiosInstance.post(API_PATHS.EXPENSE.ADD_EXPENSE, {
+        await axiosInstance.post(API_PATHS.EXPENSE.ADD, {
           category,
           amount,
           date,
