@@ -3,11 +3,11 @@ import AuthLayout from '../../components/layouts/AuthLayout';
 import Input from '../../components/Inputs/Input';
 import { Link, useNavigate } from 'react-router-dom';
 import { validateEmail } from '../../utils/helper';
-// import ProfilePhotoSelector from '../../components/Inputs/ProfilePhotoSelector'; // Commented out this import
+import ProfilePhotoSelector from '../../components/Inputs/ProfilePhotoSelector'; // Uncommented
 import axiosInstance  from '../../utils/axiosInstance';
 import { API_PATHS } from '../../utils/apiPaths';
 import { UserContext } from '../../context/userContext';
-// import uploadImage from '../../utils/uploadImage'; // Commented out this import
+import uploadImage from '../../utils/uploadImage'; // Uncommented
 
 const SignUp = () => {
   const [profilePic, setProfilePic] = useState(null); // Profile picture state
@@ -43,17 +43,17 @@ const SignUp = () => {
 
     // SignUp API call 
     try{
-      // Commented out the image upload logic
-      // if (profilePic) {
-      //   const imgUploadRes = await uploadImage(profilePic);
-      //   profileImageUrl = imgUploadRes.imageUrl || '';
-      // }
+      // Upload image if selected
+      if (profilePic) {
+        const imgUploadRes = await uploadImage(profilePic);
+        profileImageUrl = imgUploadRes.imageUrl || '';
+      }
 
       const response = await axiosInstance.post(API_PATHS.AUTH.REGISTER, {
         fullName,
         email,
         password,
-        profileImageUrl, // This will now be an empty string
+        profileImageUrl, // Now contains the uploaded image URL if available
       });
       const { token, user } = response.data;
       if (token) {
@@ -78,8 +78,8 @@ const SignUp = () => {
 
         <form onSubmit={handleSignUp} className="w-full">
 
-          {/* Commented out the ProfilePhotoSelector component */}
-          {/* <ProfilePhotoSelector image={profilePic} setImage={setProfilePic} /> */}
+          {/* Profile Photo Selector */}
+          <ProfilePhotoSelector image={profilePic} setImage={setProfilePic} />
 
           <div className='grid grid-cols-1 gap-4 w-full'>
             <Input

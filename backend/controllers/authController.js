@@ -88,3 +88,37 @@ exports.getUserInfo = async (req, res) => {
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 };
+
+// Update User Info
+exports.updateUser = async (req, res) => {
+    const userId = req.user.id;
+    const { fullName, email, password, profileImageUrl } = req.body;
+
+    try {
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // If email is being changed, check for uniqueness
+        if (email && email !== user.email) {
+            const existingUser = await User.findOne({ email });
+            if (existingUser) {
+                return res.status(400).json({ message: 'Email already in use' });
+            }
+            user.email = email;
+        }
+        if (fullName) user.fullName = fullName;
+        if (profileImageUrl) user.profileImageUrl = profileImageUrl;
+        if (password) user.password = password; // Will be hashed by pre-save hook
+
+        await user.save();
+        const updatedUser = await User.findById(userId).select('-password');
+        res.status(200).json({
+            user: updatedUser,
+            token: generateToken(user._id),
+        });
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
