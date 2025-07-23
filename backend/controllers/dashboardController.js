@@ -37,8 +37,8 @@ exports.getDashboardData = async (req, res) => {
       ]),
       Income.find({ userId: userObjectId, date: { $gte: sixtyDaysAgo } }).sort({ date: -1 }),
       Expense.find({ userId: userObjectId, date: { $gte: thirtyDaysAgo } }).sort({ date: -1 }),
-      Income.find({ userId }).sort({ date: -1 }).limit(5).select('amount date source note'),
-      Expense.find({ userId }).sort({ date: -1 }).limit(5).select('amount date category note')
+      Income.find({ userId }).sort({ date: -1 }).limit(5).select('amount date source note icon')
+      Expense.find({ userId }).sort({ date: -1 }).limit(5).select('amount date category note icon')
     ]);
 
     // Compute totals from aggregates
