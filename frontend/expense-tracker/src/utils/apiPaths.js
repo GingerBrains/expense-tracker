@@ -1,4 +1,5 @@
 export const BASE_URL = import.meta.env.VITE_API_URL;
+//export const BASE_URL = "http://localhost:8000";
 
 // utils/apiPaths.js
 export const API_PATHS = {
@@ -27,4 +28,3 @@ export const API_PATHS = {
         UPLOAD_IMAGE: "/api/v1/auth/upload-image",
     },
 };
-        
