@@ -20,6 +20,42 @@ const Income = () => {
   });
 
   const [openAddIncomeModal, setOpenAddIncomeModal] = useState(false);
+  const [editRecurring, setEditRecurring] = useState({ show: false, data: null });
+  const [cancelRecurring, setCancelRecurring] = useState({ show: false, data: null });
+
+  const handleEditRecurring = (income) => {
+    setEditRecurring({ show: true, data: income });
+  };
+
+  const handleCancelRecurring = (income) => {
+    setCancelRecurring({ show: true, data: income });
+  };
+
+  const confirmCancelRecurring = async () => {
+    try {
+      await axiosInstance.put(API_PATHS.INCOME.DELETE_INCOME(cancelRecurring.data._id), {
+        isRecurring: false,
+        recurrence: 'none',
+        recurrenceEndDate: null,
+      });
+      toast.success('Recurring income cancelled');
+      setCancelRecurring({ show: false, data: null });
+      fetchIncomeDetails();
+    } catch (error) {
+      toast.error('Failed to cancel recurrence');
+    }
+  };
+
+  const handleUpdateRecurring = async (updatedIncome) => {
+    try {
+      await axiosInstance.put(API_PATHS.INCOME.DELETE_INCOME(editRecurring.data._id), updatedIncome);
+      setEditRecurring({ show: false, data: null });
+      toast.success('Recurring income updated');
+      fetchIncomeDetails();
+    } catch (error) {
+      toast.error('Failed to update recurring income');
+    }
+  };
 
   // Get all Income Details
   const fetchIncomeDetails = async () => {
@@ -145,6 +181,8 @@ const Income = () => {
           setOpenDeleteAlert({ show: true, data: id });
         }}
         onDownload={handleDownloadIncomeDetails}
+        onEditRecurring={handleEditRecurring}
+        onCancelRecurring={handleCancelRecurring}
         />
       </div>
 
@@ -165,6 +203,44 @@ const Income = () => {
             content="Are you sure you want to delete this Income?"
             onDelete={() => deleteIncome(openDeleteAlert.data)}
             />
+        </Modal>
+
+        <Modal
+          isOpen={editRecurring.show}
+          onClose={() => setEditRecurring({ show: false, data: null })}
+          title="Edit Recurring Income"
+        >
+          <AddIncomeForm
+            onAddIncome={handleUpdateRecurring}
+            initialData={editRecurring.data}
+            editMode
+          />
+        </Modal>
+
+        <Modal
+          isOpen={cancelRecurring.show}
+          onClose={() => setCancelRecurring({ show: false, data: null })}
+          title="Cancel Recurring Income"
+        >
+          <div>
+            <p className="text-sm">Are you sure you want to cancel recurrence for <b>{cancelRecurring.data?.source}</b>?</p>
+            <div className="flex justify-end mt-6">
+              <button
+                type="button"
+                className="add-btn mr-2"
+                onClick={() => setCancelRecurring({ show: false, data: null })}
+              >
+                No
+              </button>
+              <button
+                type="button"
+                className="add-btn add-btn-fill"
+                onClick={confirmCancelRecurring}
+              >
+                Yes, Cancel Recurrence
+              </button>
+            </div>
+          </div>
         </Modal>
     </div>
     </DashboardLayout>

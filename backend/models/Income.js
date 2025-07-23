@@ -19,7 +19,21 @@ const IncomeSchema = new mongoose.Schema({
     },
     date: {
         type: Date,
-        default: Date.now},
-    },{ timestamps: true });
+        default: Date.now
+    },
+    isRecurring: {
+        type: Boolean,
+        default: false
+    },
+    recurrence: {
+        type: String, // 'daily', 'weekly', 'monthly', 'yearly'
+        enum: ['none', 'daily', 'weekly', 'monthly', 'yearly'],
+        default: 'none'
+    },
+    recurrenceEndDate: {
+        type: Date,
+        default: null
+    }
+}, { timestamps: true });
 
 module.exports = mongoose.model('Income', IncomeSchema);
