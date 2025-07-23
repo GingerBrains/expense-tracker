@@ -5,7 +5,7 @@ const Income = require('../models/Income');
 exports.addIncome = async (req, res) => {
     const userId = req.user._id;
     try{
-        const { icon, source, amount } = req.body;
+        const { icon, source, amount, date } = req.body;
 
         // Check amount is a number
         if (isNaN(amount)) {
@@ -23,7 +23,7 @@ exports.addIncome = async (req, res) => {
             icon,
             source,
             amount,
-            date: new Date() // Default to current date
+            date: date ? new Date(date) : new Date() // Default to current date
         });
 
         await newIncome.save();
