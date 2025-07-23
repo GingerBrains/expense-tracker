@@ -56,6 +56,7 @@ const IncomeList = ({transactions, onDelete, onDownload, onEditRecurring, onCanc
             recurrence={income.recurrence}
             recurrenceEndDate={income.recurrenceEndDate}
             onDelete={() => onDelete(income._id)}
+            onEdit={() => onEditRecurring && onEditRecurring(income)}
           />
         ))}
       </div>

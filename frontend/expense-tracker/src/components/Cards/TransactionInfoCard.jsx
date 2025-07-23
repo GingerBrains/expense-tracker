@@ -48,22 +48,22 @@ const TransactionInfoCard = ({
                   </p>
                 )}
                 {/* Edit and Cancel Recurrence Buttons */}
-                {isRecurring && (
-                  <div className="flex gap-2 mt-2">
-                    <button
-                      className="text-xs text-blue-600 underline hover:text-blue-800"
-                      onClick={onEdit}
-                    >
-                      Edit
-                    </button>
+                <div className="flex gap-2 mt-2">
+                  <button
+                    className="text-xs text-blue-600 underline hover:text-blue-800"
+                    onClick={onEdit}
+                  >
+                    Edit
+                  </button>
+                  {isRecurring && (
                     <button
                       className="text-xs text-red-500 underline hover:text-red-700"
                       onClick={onCancelRecurrence}
                     >
                       Cancel Recurrence
                     </button>
-                  </div>
-                )}
+                  )}
+                </div>
             </div>
 
             <div className='flex items-center gap-2'>

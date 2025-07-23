@@ -56,6 +56,7 @@ const ExpenseList = ({ transactions, onDelete, onDownload, onEditRecurring, onCa
             recurrence={expense.recurrence}
             recurrenceEndDate={expense.recurrenceEndDate}
             onDelete={() => onDelete(expense._id)}
+            onEdit={() => onEditRecurring && onEditRecurring(expense)}
           />
         ))}
       </div>
