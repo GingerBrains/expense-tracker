@@ -49,36 +49,29 @@ const Expense = () => {
 
       // Handle Add Expense
   const handleAddExpense = async (expense) => {
-      const { category, amount, date, icon } = expense;
-
       // Validation Checks
-      if(!category.trim()) {
+      if(!expense.category.trim()) {
         toast.error("Category is required.");
         return;
       }
 
-      if(!amount || isNaN(amount) || Number(amount) <= 0) {
+      if(!expense.amount || isNaN(expense.amount) || Number(expense.amount) <= 0) {
         toast.error("Amount should be a valid number.");
         return;
       }
 
-      if (!date) {
+      if (!expense.date) {
         toast.error("Date is required");
         return;
       }
 
-      if (!icon) {
+      if (!expense.icon) {
         toast.error("Icon is required");
         return;
       }
 
       try {
-        await axiosInstance.post(API_PATHS.EXPENSE.ADD_EXPENSE, {
-          category,
-          amount,
-          date,
-          icon,
-        });
+        await axiosInstance.post(API_PATHS.EXPENSE.ADD_EXPENSE, expense);
         setOpenAddExpenseModal(false);
         toast.success("Expense added successfully");
         fetchExpenseDetails();
