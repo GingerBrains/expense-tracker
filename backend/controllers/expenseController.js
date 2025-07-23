@@ -5,7 +5,7 @@ const Expense = require('../models/Expense');
 exports.addExpense = async (req, res) => {
     const userId = req.user._id;
     try{
-        const { icon, category, amount, date } = req.body;
+        const { icon, category, amount, date, isRecurring, recurrence, recurrenceEndDate } = req.body;
 
         // Validate input
         if (!category || !amount ) {
@@ -18,7 +18,10 @@ exports.addExpense = async (req, res) => {
             icon,
             category,
             amount,
-            date: date ? new Date(date) : new Date() // Default to current date
+            date: date ? new Date(date) : new Date(), // Default to current date
+            isRecurring: isRecurring || false,
+            recurrence: recurrence || 'none',
+            recurrenceEndDate: recurrenceEndDate ? new Date(recurrenceEndDate) : null
         });
 
         await newExpense.save();
@@ -50,6 +53,25 @@ exports.deleteExpense = async (req, res) => {
         res.json({ message: 'Expense deleted successfully.' });
     } catch (error) {
         console.error('Error deleting expense:', error);
+        res.status(500).json({ message: 'Server error. Please try again later.' });
+    }
+}
+
+// Update Expense
+exports.updateExpense = async (req, res) => {
+    try {
+        const updateFields = req.body;
+        const updatedExpense = await Expense.findByIdAndUpdate(
+            req.params.id,
+            updateFields,
+            { new: true }
+        );
+        if (!updatedExpense) {
+            return res.status(404).json({ message: 'Expense not found.' });
+        }
+        res.status(200).json(updatedExpense);
+    } catch (error) {
+        console.error('Error updating expense:', error);
         res.status(500).json({ message: 'Server error. Please try again later.' });
     }
 }

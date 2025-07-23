@@ -5,7 +5,7 @@ const Income = require('../models/Income');
 exports.addIncome = async (req, res) => {
     const userId = req.user._id;
     try{
-        const { icon, source, amount, date } = req.body;
+        const { icon, source, amount, date, isRecurring, recurrence, recurrenceEndDate } = req.body;
 
         // Check amount is a number
         if (isNaN(amount)) {
@@ -23,7 +23,10 @@ exports.addIncome = async (req, res) => {
             icon,
             source,
             amount,
-            date: date ? new Date(date) : new Date() // Default to current date
+            date: date ? new Date(date) : new Date(), // Default to current date
+            isRecurring: isRecurring || false,
+            recurrence: recurrence || 'none',
+            recurrenceEndDate: recurrenceEndDate ? new Date(recurrenceEndDate) : null
         });
 
         await newIncome.save();

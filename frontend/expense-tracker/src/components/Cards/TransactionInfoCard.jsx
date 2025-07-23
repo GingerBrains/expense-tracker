@@ -13,7 +13,12 @@ const TransactionInfoCard = ({
     amount,
     type,
     hideDeleteBtn,
-    onDelete
+    onDelete,
+    isRecurring,
+    recurrence,
+    recurrenceEndDate,
+    onEdit,
+    onCancelRecurrence
 }) => {
     const getAmountStyles = () => type === "income" ? "bg-green-50 text-green-500" : "bg-red-50 text-red-500"
     
@@ -29,8 +34,36 @@ const TransactionInfoCard = ({
 
         <div className='flex-1 flex items-center justify-between'>
             <div>
-                <p className='text-sm text-gray-700 font-medium'>{title}</p>
+                <p className='text-sm text-gray-700 font-medium flex items-center gap-2'>
+                  {title}
+                  {isRecurring && <span title="Recurring" className="text-blue-500 text-xs">🔁</span>}
+                </p>
                 <p className='text-xs text-gray-400 mt-1'>{date}</p>
+                {isRecurring && (
+                  <p className='text-xs text-blue-500 mt-1'>
+                    {recurrence && recurrence !== 'none' && `Repeats: ${recurrence.charAt(0).toUpperCase() + recurrence.slice(1)}`}
+                    {recurrenceEndDate && (
+                      <span> | Ends: {new Date(recurrenceEndDate).toLocaleDateString()}</span>
+                    )}
+                  </p>
+                )}
+                {/* Edit and Cancel Recurrence Buttons */}
+                {isRecurring && (
+                  <div className="flex gap-2 mt-2">
+                    <button
+                      className="text-xs text-blue-600 underline hover:text-blue-800"
+                      onClick={onEdit}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="text-xs text-red-500 underline hover:text-red-700"
+                      onClick={onCancelRecurrence}
+                    >
+                      Cancel Recurrence
+                    </button>
+                  </div>
+                )}
             </div>
 
             <div className='flex items-center gap-2'>

@@ -23,6 +23,8 @@ const Expense = () => {
     });
   
     const [openAddExpenseModal, setOpenAddExpenseModal] = useState(false);
+    const [editRecurring, setEditRecurring] = useState({ show: false, data: null });
+    const [cancelRecurring, setCancelRecurring] = useState({ show: false, data: null });
 
       // Get all Expense Details
   const fetchExpenseDetails = async () => {
@@ -128,6 +130,40 @@ const Expense = () => {
     }
   };
 
+  const handleEditRecurring = (expense) => {
+    setEditRecurring({ show: true, data: expense });
+  };
+
+  const handleCancelRecurring = (expense) => {
+    setCancelRecurring({ show: true, data: expense });
+  };
+
+  const confirmCancelRecurring = async () => {
+    try {
+      await axiosInstance.put(API_PATHS.EXPENSE.DELETE_EXPENSE(cancelRecurring.data._id), {
+        isRecurring: false,
+        recurrence: 'none',
+        recurrenceEndDate: null,
+      });
+      toast.success('Recurring expense cancelled');
+      setCancelRecurring({ show: false, data: null });
+      fetchExpenseDetails();
+    } catch (error) {
+      toast.error('Failed to cancel recurrence');
+    }
+  };
+
+  const handleUpdateRecurring = async (updatedExpense) => {
+    try {
+      await axiosInstance.put(API_PATHS.EXPENSE.DELETE_EXPENSE(editRecurring.data._id), updatedExpense);
+      setEditRecurring({ show: false, data: null });
+      toast.success('Recurring expense updated');
+      fetchExpenseDetails();
+    } catch (error) {
+      toast.error('Failed to update recurring expense');
+    }
+  };
+
     useEffect(() => {
       fetchExpenseDetails();
 
@@ -151,6 +187,8 @@ const Expense = () => {
           setOpenDeleteAlert({ show: true, data: id });
         }}
         onDownload={handleDownloadExpenseDetails}
+        onEditRecurring={handleEditRecurring}
+        onCancelRecurring={handleCancelRecurring}
         />
       </div>
 
@@ -171,6 +209,43 @@ const Expense = () => {
             content="Are you sure you want to delete this Expense?"
             onDelete={() => deleteExpense(openDeleteAlert.data)}
             />
+        </Modal>
+
+        <Modal
+          isOpen={editRecurring.show}
+          onClose={() => setEditRecurring({ show: false, data: null })}
+          title="Edit Recurring Expense"
+        >
+          <AddExpenseForm
+            onAddExpense={handleUpdateRecurring}
+            initialData={editRecurring.data}
+            editMode
+          />
+        </Modal>
+        <Modal
+          isOpen={cancelRecurring.show}
+          onClose={() => setCancelRecurring({ show: false, data: null })}
+          title="Cancel Recurring Expense"
+        >
+          <div>
+            <p className="text-sm">Are you sure you want to cancel recurrence for <b>{cancelRecurring.data?.category}</b>?</p>
+            <div className="flex justify-end mt-6">
+              <button
+                type="button"
+                className="add-btn mr-2"
+                onClick={() => setCancelRecurring({ show: false, data: null })}
+              >
+                No
+              </button>
+              <button
+                type="button"
+                className="add-btn add-btn-fill"
+                onClick={confirmCancelRecurring}
+              >
+                Yes, Cancel Recurrence
+              </button>
+            </div>
+          </div>
         </Modal>
     </div>
     </DashboardLayout>
