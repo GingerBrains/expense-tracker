@@ -5,7 +5,7 @@ const Expense = require('../models/Expense');
 exports.addExpense = async (req, res) => {
     const userId = req.user._id;
     try{
-        const { icon, category, amount } = req.body;
+        const { icon, category, amount, date } = req.body;
 
         // Validate input
         if (!category || !amount ) {
@@ -18,7 +18,7 @@ exports.addExpense = async (req, res) => {
             icon,
             category,
             amount,
-            date: new Date() // Default to current date
+            date: date ? new Date(date) : new Date() // Default to current date
         });
 
         await newExpense.save();
