@@ -38,7 +38,7 @@ exports.registerUser = async (req, res) => {
             profileImageUrl,
             isVerified: false,
             emailVerificationToken,
-            emailVerificationExpires: expires,
+            emailVerificationExpires: new Date(expires),
             verificationTimeout: new Date(expires), // Set to 1 hour in the future
         });
 
