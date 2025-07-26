@@ -68,7 +68,7 @@ exports.verifyEmail = async (req, res) => {
     try {
         const user = await User.findOne({
             emailVerificationToken: token,
-            emailVerificationExpires: { $gt: Date.now() },
+            emailVerificationExpires: { $gt: new Date() },
         });
         //console.log('User found for verification:', user);
         if (!user) {
