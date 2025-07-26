@@ -9,26 +9,10 @@ const incomeRoutes = require("./routes/incomeRoutes");
 const expenseRoutes = require("./routes/expenseRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
 
-// Scheduled cleanup of unverified, expired users
+// Scheduled jobs for recurring transactions
 const cron = require('node-cron');
-const User = require('./models/User');
 const Income = require('./models/Income');
 const Expense = require('./models/Expense');
-
-// Run every hour at minute 0
-cron.schedule('0 * * * *', async () => {
-  try {
-    const result = await User.deleteMany({
-      isVerified: false,
-      emailVerificationExpires: { $lt: Date.now() }
-    });
-    if (result.deletedCount > 0) {
-      console.log(`Deleted ${result.deletedCount} unverified expired users.`);
-    }
-  } catch (err) {
-    console.error('Error deleting unverified users:', err);
-  }
-});
 
 // Scheduled job to generate recurring income transactions
 cron.schedule('0 1 * * *', async () => { // Run daily at 1:00 AM

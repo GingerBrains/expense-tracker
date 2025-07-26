@@ -40,6 +40,7 @@ exports.registerUser = async (req, res) => {
             isVerified: false,
             emailVerificationToken,
             emailVerificationExpires,
+            verificationTimeout: new Date(), // Set current timestamp for TTL deletion
         });
         //console.log('User after creation:', user);
 
@@ -82,6 +83,7 @@ exports.verifyEmail = async (req, res) => {
         user.isVerified = true;
         user.emailVerificationToken = null;
         user.emailVerificationExpires = null;
+        user.verificationTimeout = null; // Remove TTL field to prevent deletion
         await user.save();
         res.status(200).json({ message: 'Email verified successfully! You can now log in.' });
     } catch (error) {
