@@ -49,8 +49,8 @@ const userSchema = new mongoose.Schema({
 });
 
 // Create TTL index for automatic deletion of unverified users
-// This will automatically delete documents after 1 hour (3600 seconds)
-userSchema.index({ verificationTimeout: 1 }, { expireAfterSeconds: 3600 });
+// This will automatically delete documents at the specified verificationTimeout
+userSchema.index({ verificationTimeout: 1 }, { expireAfterSeconds: 1 });
 
 // Hash password before saving to database
 userSchema.pre('save', async function(next) {

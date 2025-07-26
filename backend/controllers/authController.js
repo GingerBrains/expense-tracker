@@ -28,8 +28,7 @@ exports.registerUser = async (req, res) => {
 
         // Generate email verification token
         const emailVerificationToken = crypto.randomBytes(32).toString('hex');
-        const emailVerificationExpires = Date.now() + 60 * 60 * 1000; // 1 hour
-        //console.log('Generated verification token:', emailVerificationToken);
+        const expires = Date.now() + 60 * 60 * 1000; // 1 hour in the future
 
         //Create new user (not verified)
         const user = await User.create({
@@ -39,22 +38,17 @@ exports.registerUser = async (req, res) => {
             profileImageUrl,
             isVerified: false,
             emailVerificationToken,
-            emailVerificationExpires,
-            verificationTimeout: new Date(), // Set current timestamp for TTL deletion
+            emailVerificationExpires: expires,
+            verificationTimeout: new Date(expires), // Set to 1 hour in the future
         });
-        //console.log('User after creation:', user);
 
         // Send verification email
         const verifyUrl = `${process.env.CLIENT_URL || 'http://localhost:5173'}/verify-email?token=${emailVerificationToken}`;
-        const mailResult = await sendMail({
+        await sendMail({
             to: user.email,
             subject: 'Verify your email',
             html: `<p>Hi ${user.fullName},</p><p>Please verify your email by clicking the link below:</p><a href="${verifyUrl}">${verifyUrl}</a><p>This link will expire in 1 hour.</p>`
         });
-        //console.log('Mail result:', mailResult);
-        //if (mailResult && mailResult.preview) {
-        //    console.log('Preview URL:', mailResult.preview);
-        //}
 
         res.status(201).json({
             message: 'Registration successful! Please check your email to verify your account.',
