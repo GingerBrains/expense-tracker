@@ -18,7 +18,8 @@ const TransactionInfoCard = ({
     recurrence,
     recurrenceEndDate,
     onEdit,
-    onCancelRecurrence
+    onCancelRecurrence,
+    hideEditBtn,
 }) => {
     const getAmountStyles = () => type === "income" ? "bg-green-50 text-green-500" : "bg-red-50 text-red-500"
     
@@ -49,12 +50,14 @@ const TransactionInfoCard = ({
                 )}
                 {/* Edit and Cancel Recurrence Buttons */}
                 <div className="flex gap-2 mt-2">
-                  <button
-                    className="text-xs text-blue-600 underline hover:text-blue-800"
-                    onClick={onEdit}
-                  >
-                    Edit
-                  </button>
+                  {(!hideEditBtn && onEdit) && (
+                    <button
+                      className="text-xs text-blue-600 underline hover:text-blue-800"
+                      onClick={onEdit}
+                    >
+                      Edit
+                    </button>
+                  )}
                   {isRecurring && (
                     <button
                       className="text-xs text-red-500 underline hover:text-red-700"

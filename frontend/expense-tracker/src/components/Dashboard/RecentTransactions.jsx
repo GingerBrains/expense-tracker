@@ -25,6 +25,7 @@ const RecentTransactions=({ transactions, onSeeMore }) => {
             amount={item.amount}
             type={item.type}
             hideDeleteBtn
+            hideEditBtn={true}
             />
         ))}
       </div>
