@@ -11,7 +11,7 @@ A fully responsive Expense Tracker App using the MERN (MongoDB, Express, React, 
 - Recurring transactions (income & expense)
 - Dashboard with charts and summaries
 - Export income and expense data to Excel
-- Profile management with photo upload
+- Profile management with photo upload (Cloudinary integration)
 - Responsive UI (React + TailwindCSS)
 - API endpoints for all major actions
 
@@ -58,6 +58,9 @@ SMTP_PORT=587
 SMTP_USER=your_ethereal_user
 SMTP_PASS=your_ethereal_pass
 SMTP_FROM=no-reply@expensetracker.com
+CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+CLOUDINARY_API_KEY=your_cloudinary_api_key
+CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 ```
 
 Start the backend server:
@@ -119,12 +122,45 @@ Visit [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
+## Dependencies
+
+### Backend
+- `cloudinary` - Cloud image storage and optimization
+- `multer-storage-cloudinary` - Multer integration with Cloudinary
+- `node-cron` - Scheduled jobs for recurring transactions
+- `nodemailer` - Email functionality
+- `bcryptjs` - Password hashing
+- `jsonwebtoken` - JWT authentication
+- `mongoose` - MongoDB ODM
+- `express` - Web framework
+- `cors` - Cross-origin resource sharing
+- `dotenv` - Environment variables
+
+### Frontend
+- `react` - UI library
+- `react-router-dom` - Client-side routing
+- `axios` - HTTP client
+- `recharts` - Chart components
+- `tailwindcss` - CSS framework
+- `vite` - Build tool
+
 ## Scheduled Jobs
 
-- **Cleanup:** Deletes unverified users every hour
+- **Cleanup:** Deletes unverified users every hour (MongoDB TTL index)
 - **Recurring Transactions:** Generates recurring income/expense entries daily
 
 ---
+
+## Deployment
+
+### Backend (Render)
+- Environment variables configured for production
+- Automatic deployment from GitHub
+- Cloudinary integration for persistent image storage
+
+### Frontend (Vercel)
+- Automatic deployment from GitHub
+- Environment variables configured for production API
 
 ## License
 
