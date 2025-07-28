@@ -43,7 +43,8 @@ exports.registerUser = async (req, res) => {
         });
 
         // Send verification email
-        const verifyUrl = `${process.env.CLIENT_URL || 'http://localhost:5173'}/verify-email?token=${emailVerificationToken}`;
+        const clientUrl = (process.env.CLIENT_URL || 'http://localhost:5173').replace(/\/$/, ''); // Remove trailing slash
+        const verifyUrl = `${clientUrl}/verify-email?token=${emailVerificationToken}`;
         await sendMail({
             to: user.email,
             subject: 'Verify your email',
