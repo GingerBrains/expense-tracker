@@ -20,7 +20,7 @@ A fully responsive Expense Tracker App using the MERN (MongoDB, Express, React, 
 ## Project Structure
 
 - **backend/** – Node.js/Express API, MongoDB models, authentication, scheduled jobs
-- **frontend/expense-tracker/** – React app (Vite, TailwindCSS), all UI and API calls
+- **frontend/** – React app (Vite, TailwindCSS), all UI and API calls
 
 ---
 
@@ -72,11 +72,11 @@ npm run dev
 ### 3. Frontend Setup
 
 ```bash
-cd frontend/expense-tracker
+cd frontend
 npm install
 ```
 
-Create a `.env` file in `frontend/expense-tracker/`:
+Create a `.env` file in `frontend/`:
 
 ```
 VITE_API_URL=http://localhost:5000
